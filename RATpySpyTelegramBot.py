@@ -11,7 +11,6 @@
 #██████╔╝██║░░░░░░░░██║░░░ ░░░██║░░░███████╗███████╗███████╗╚██████╔╝██║░░██║██║░░██║██║░╚═╝░██║
 #╚═════╝░╚═╝░░░░░░░░╚═╝░░░ ░░░╚═╝░░░╚══════╝╚══════╝╚══════╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░╚═╝ v1.0
 import time
-
 import telepot
 from telepot.loop import MessageLoop
 
@@ -45,13 +44,25 @@ class Config:
 
 
 
-
 def handle(msg):
-    content_type, chat_type, chat_id = telepot.glance(msg)
-    print(content_type, chat_type, chat_id)
+    command = msg['text']  # Texto a recibir
+    #content_type, chat_type, chat_id = telepot.glance(msg)
+    #print(content_type, chat_type, chat_id)
+    cache = ""
 
-    if content_type == 'text':
-        bot.sendMessage(chat_id, msg['text'])
+
+
+    if command == "/about":
+        bot.sendMessage(Config.TelegramBot().ID, "/About\n Developed by: SebastiánEPH")
+    elif command == "/screenshot ":
+        bot.sendMessage(Config.TelegramBot().ID, "Scrrenshot")
+    elif command == '/help':
+        functionelities =   "/red_info => Información de la Red\n" \
+                            "/webcam   => Toma foto a la WebCam\n" \
+                            "/mas comandos   "
+
+
+        bot.sendMessage(Config.TelegramBot().ID,functionelities )
 
 
 # Starting Script
@@ -63,6 +74,11 @@ if __name__ == '__main__':
     bot.sendMessage(Config.TelegramBot().ID, "Usted está en linea ...")
     MessageLoop(bot, handle).run_as_thread()
     print('Listening ...')
+
+
+
+
+
 
     # Keep the program running.
     while True:

